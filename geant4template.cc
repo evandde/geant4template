@@ -30,6 +30,7 @@
 /// \brief Template code for Geant4 (Geant4 10.6.p02)
 
 #include "DetectorConstruction.hh"
+#include "G4PhysListFactory.hh"
 #include "QBBC.hh"
 #include "ActionInitialization.hh"
 
@@ -43,8 +44,58 @@
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 
+namespace
+{
+    void PrintUsage()
+    {
+        G4cerr << " Usage: " << G4endl
+               << " ProjectName [-option1 value1] [-option2 value2] ..." << G4endl;
+        G4cerr << "\t--- Option lists ---"
+               << "\n\t[-m] <Set macrofile> default: "
+                  "vis.mac"
+                  ", inputtype: string"
+#ifdef G4MULTITHREADED
+               << "\n\t[-t] <Set nThreads> default: 1, inputtype: int, Max: "
+               << G4Threading::G4GetNumberOfCores()
+#endif
+               << "\n\t[-p] <Set physics> default: 'QBBC', inputtype: string"
+
+               << G4endl;
+    }
+} // namespace
+
 int main(int argc, char **argv)
 {
+    // Default setting for main() arguments
+    G4String macroFilePath;
+#ifdef G4MULTITHREADED
+    G4int nThreads = 1;
+#endif
+    G4String physName;
+
+    // Parsing main() Arguments
+    for (G4int i = 1; i < argc; i = i + 2)
+    {
+        if (G4String(argv[i]) == "-m")
+            macroFilePath = argv[i + 1];
+#ifdef G4MULTITHREADED
+        else if (G4String(argv[i]) == "-t")
+            nThreads = G4UIcommand::ConvertToInt(argv[i + 1]);
+#endif
+        else if (G4String(argv[i]) == "-p")
+            physName = argv[i + 1];
+        else
+        {
+            PrintUsage();
+            return 1;
+        }
+    }
+    if (argc > 7)
+    {
+        PrintUsage();
+        return 1;
+    }
+
     // Set random engine and seed number
     G4Random::setTheEngine(new CLHEP::RanecuEngine);
     G4Random::setTheSeed(time(nullptr));
@@ -52,13 +103,21 @@ int main(int argc, char **argv)
     // Construct the default run manager
 #ifdef G4MULTITHREADED
     auto runManager = new G4MTRunManager;
+    runManager->SetNumberOfThreads(nThreads);
 #else
     auto runManager = new G4RunManager;
 #endif
 
     // Set mandatory initialization classes
     runManager->SetUserInitialization(new DetectorConstruction);
-    runManager->SetUserInitialization(new QBBC);
+    G4VModularPhysicsList* phys;
+    if(physName.empty()) phys = new QBBC;
+    else
+    {
+        G4PhysListFactory factory;
+        phys = factory.GetReferencePhysList(physName);
+    }
+    runManager->SetUserInitialization(phys);
     runManager->SetUserInitialization(new ActionInitialization);
 
     // Initialize run
@@ -72,9 +131,9 @@ int main(int argc, char **argv)
     auto UImanager = G4UImanager::GetUIpointer();
 
     // Process macro or start UI session
-    if (argc == 1)
+    if (macroFilePath.empty())
     {
-        // interactive mode (if no arguments)
+        // interactive mode (if no macrofile)
         auto ui = new G4UIExecutive(argc, argv);
         UImanager->ApplyCommand("/control/execute vis.mac");
         ui->SessionStart();
@@ -84,8 +143,7 @@ int main(int argc, char **argv)
     {
         // batch mode
         G4String command = "/control/execute ";
-        G4String fileName = argv[1];
-        UImanager->ApplyCommand(command + fileName);
+        UImanager->ApplyCommand(command + macroFilePath);
     }
 
     // Job termination
