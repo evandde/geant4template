@@ -16,7 +16,7 @@ Run::~Run()
 void Run::RecordEvent(const G4Event *anEvent)
 {
     if (fEDepHCID == -1)
-        fEDepHCID = G4SDManager::GetSDMpointer()->GetCollectionID("DetectorMFD/EDep");
+        fEDepHCID = G4SDManager::GetSDMpointer()->GetCollectionID("Detector/EDep");
 
     auto HCE = anEvent->GetHCofThisEvent();
     if (!HCE)
