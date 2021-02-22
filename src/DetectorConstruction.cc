@@ -1,4 +1,5 @@
 #include "DetectorConstruction.hh"
+#include "SensitiveDetector.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
@@ -7,8 +8,6 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4SDManager.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4PSEnergyDeposit.hh"
 
 DetectorConstruction::DetectorConstruction()
     : G4VUserDetectorConstruction()
@@ -51,9 +50,7 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
 
 void DetectorConstruction::ConstructSDandField()
 {
-    auto mfdDetector = new G4MultiFunctionalDetector("Detector");
-    G4SDManager::GetSDMpointer()->AddNewDetector(mfdDetector);
-    auto psEDep = new G4PSEnergyDeposit("EDep");
-    mfdDetector->RegisterPrimitive(psEDep);
-    SetSensitiveDetector("Detector", mfdDetector);
+    auto sd = new SensitiveDetector("Detector");
+    G4SDManager::GetSDMpointer()->AddNewDetector(sd);
+    SetSensitiveDetector("Detector", sd);
 }

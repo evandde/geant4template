@@ -11,9 +11,7 @@ public:
     RunAction();
     virtual ~RunAction() override;
 
-    virtual G4Run *GenerateRun() override;
     virtual void BeginOfRunAction(const G4Run *) override;
-    virtual void EndOfRunAction(const G4Run *) override;
 };
 
 #endif
