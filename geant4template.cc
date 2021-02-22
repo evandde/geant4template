@@ -27,7 +27,7 @@
 /// \author Evan Kim
 /// \email evandde@gmail.com
 /// \homepage evandde.github.io
-/// \brief Template code for Geant4 (Geant4 10.6.p02)
+/// \brief Template code for Geant4 (Geant4 10.7.p01)
 
 #include "DetectorConstruction.hh"
 #include "G4PhysListFactory.hh"
