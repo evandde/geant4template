@@ -51,9 +51,9 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
 
 void DetectorConstruction::ConstructSDandField()
 {
-    auto mfdDetector = new G4MultiFunctionalDetector("Detector");
-    G4SDManager::GetSDMpointer()->AddNewDetector(mfdDetector);
+    auto mfd = new G4MultiFunctionalDetector("Detector");
+    G4SDManager::GetSDMpointer()->AddNewDetector(mfd);
     auto psEDep = new G4PSEnergyDeposit("EDep");
-    mfdDetector->RegisterPrimitive(psEDep);
-    SetSensitiveDetector("Detector", mfdDetector);
+    mfd->RegisterPrimitive(psEDep);
+    SetSensitiveDetector("Detector", mfd);
 }
