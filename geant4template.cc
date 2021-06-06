@@ -34,12 +34,7 @@
 #include "QBBC.hh"
 #include "ActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
@@ -54,10 +49,8 @@ namespace
                << "\n\t[-m] <Set macrofile> default: "
                   "vis.mac"
                   ", inputtype: string"
-#ifdef G4MULTITHREADED
                << "\n\t[-t] <Set nThreads> default: 1, inputtype: int, Max: "
                << G4Threading::G4GetNumberOfCores()
-#endif
                << "\n\t[-p] <Set physics> default: 'QBBC', inputtype: string"
 
                << G4endl;
@@ -68,9 +61,7 @@ int main(int argc, char **argv)
 {
     // Default setting for main() arguments
     G4String macroFilePath;
-#ifdef G4MULTITHREADED
     G4int nThreads = 1;
-#endif
     G4String physName;
 
     // Parsing main() Arguments
@@ -78,10 +69,8 @@ int main(int argc, char **argv)
     {
         if (G4String(argv[i]) == "-m")
             macroFilePath = argv[i + 1];
-#ifdef G4MULTITHREADED
         else if (G4String(argv[i]) == "-t")
             nThreads = G4UIcommand::ConvertToInt(argv[i + 1]);
-#endif
         else if (G4String(argv[i]) == "-p")
             physName = argv[i + 1];
         else
@@ -101,17 +90,14 @@ int main(int argc, char **argv)
     G4Random::setTheSeed(time(nullptr));
 
     // Construct the default run manager
-#ifdef G4MULTITHREADED
-    auto runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(nThreads);
-#else
-    auto runManager = new G4RunManager;
-#endif
+    auto runManager = G4RunManagerFactory::CreateRunManager(
+        nThreads == 1 ? G4RunManagerType::Serial : G4RunManagerType::Default, nThreads);
 
     // Set mandatory initialization classes
     runManager->SetUserInitialization(new DetectorConstruction);
-    G4VModularPhysicsList* phys;
-    if(physName.empty()) phys = new QBBC;
+    G4VModularPhysicsList *phys;
+    if (physName.empty())
+        phys = new QBBC;
     else
     {
         G4PhysListFactory factory;
