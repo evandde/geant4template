@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
-project(geant4template)
+project(projectName)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -25,8 +25,8 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(geant4template geant4template.cc ${sources} ${headers})
-target_link_libraries(geant4template ${Geant4_LIBRARIES})
+add_executable(projectName main.cc ${sources} ${headers})
+target_link_libraries(projectName ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory. This is so that we can run the
