@@ -5,11 +5,11 @@
 /control/verbose 2
 /run/verbose 2
 /event/verbose 0
-/tracking/verbose 1
+/tracking/verbose 0
 
 # gamma 6 MeV to iso
 /gps/particle gamma
 /gps/energy 0.662 MeV
 /gps/ang/type iso
 
-/run/beamOn 100
+/run/beamOn 10

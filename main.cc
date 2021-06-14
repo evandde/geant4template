@@ -29,15 +29,15 @@
 /// \homepage evandde.github.io
 /// \brief Template code for Geant4 (Geant4 10.7.p01)
 
-#include "DetectorConstruction.hh"
-#include "G4PhysListFactory.hh"
-#include "QBBC.hh"
-#include "ActionInitialization.hh"
-
 #include "G4RunManagerFactory.hh"
+#include "G4PhysListFactory.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "QBBC.hh"
+
+#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
 
 namespace
 {

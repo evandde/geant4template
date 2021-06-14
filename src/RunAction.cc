@@ -1,38 +1,39 @@
-#include "RunAction.hh"
-#include "Run.hh"
-
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "g4csv.hh"
+
+#include "RunAction.hh"
 
 RunAction::RunAction()
     : G4UserRunAction()
 {
+    auto analysisManager = G4AnalysisManager::Instance();
+
+    analysisManager->CreateH1("EDep", "Energy Deposition", 1024, 0., 3. * MeV);
+    
+    analysisManager->CreateNtuple("EDep", "Energy Deposition");
+    analysisManager->CreateNtupleIColumn("EvtID");
+    analysisManager->CreateNtupleDColumn("E(MeV)");
+
+    analysisManager->FinishNtuple();
 }
 
 RunAction::~RunAction()
 {
+    delete G4AnalysisManager::Instance();
 }
 
-G4Run *RunAction::GenerateRun()
+void RunAction::BeginOfRunAction(const G4Run *)
 {
-    return new Run;
+    auto analysisManager = G4AnalysisManager::Instance();
+
+    analysisManager->OpenFile("Result");
 }
 
-void RunAction::BeginOfRunAction(const G4Run *aRun)
+void RunAction::EndOfRunAction(const G4Run *)
 {
-    G4RunManager::GetRunManager()->SetPrintProgress(static_cast<G4int>(aRun->GetNumberOfEventToBeProcessed() * .1));
-}
-
-void RunAction::EndOfRunAction(const G4Run *aRun)
-{
-    auto nOfEvents = aRun->GetNumberOfEvent();
-    if (nOfEvents == 0)
-        return;
-
-    auto theRun = static_cast<const Run *>(aRun);
-    auto eDep = theRun->GetEDep();
-
-    G4cout << "--- Run results ---\n"
-           << "Total events in this run: " << nOfEvents << "\n"
-           << "Deposited energy per primary [MeV]: " << (eDep / nOfEvents) / MeV << "\n\n";
+    auto analysisManager = G4AnalysisManager::Instance();
+    
+    analysisManager->Write();
+    analysisManager->CloseFile();
 }
