@@ -1,5 +1,3 @@
-#include "DetectorConstruction.hh"
-
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 #include "G4Box.hh"
@@ -9,6 +7,8 @@
 #include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4PSEnergyDeposit.hh"
+
+#include "DetectorConstruction.hh"
 
 DetectorConstruction::DetectorConstruction()
     : G4VUserDetectorConstruction()
@@ -22,7 +22,7 @@ DetectorConstruction::~DetectorConstruction()
 G4VPhysicalVolume *DetectorConstruction::Construct()
 {
     // materials
-    G4NistManager *nist = G4NistManager::Instance();
+    auto nist = G4NistManager::Instance();
     auto matAir = nist->FindOrBuildMaterial("G4_AIR");
     auto matBGO = nist->FindOrBuildMaterial("G4_BGO");
 

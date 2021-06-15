@@ -1,6 +1,6 @@
-#include "PrimaryGeneratorAction.hh"
-
 #include "G4GeneralParticleSource.hh"
+
+#include "PrimaryGeneratorAction.hh"
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
     : G4VUserPrimaryGeneratorAction()

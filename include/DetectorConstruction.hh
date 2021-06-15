@@ -3,9 +3,6 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:

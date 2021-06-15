@@ -10,11 +10,10 @@ RunAction::RunAction()
     auto analysisManager = G4AnalysisManager::Instance();
 
     analysisManager->CreateH1("EDep", "Energy Deposition", 1024, 0., 3. * MeV);
-    
+
     analysisManager->CreateNtuple("EDep", "Energy Deposition");
     analysisManager->CreateNtupleIColumn("EvtID");
     analysisManager->CreateNtupleDColumn("E(MeV)");
-
     analysisManager->FinishNtuple();
 }
 
@@ -25,6 +24,8 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run *)
 {
+    G4RunManager::GetRunManager()->SetPrintProgress(static_cast<G4int>(G4RunManager::GetRunManager()->GetNumberOfEventsToBeProcessed() * .1));
+
     auto analysisManager = G4AnalysisManager::Instance();
 
     analysisManager->OpenFile("Result");
@@ -33,7 +34,7 @@ void RunAction::BeginOfRunAction(const G4Run *)
 void RunAction::EndOfRunAction(const G4Run *)
 {
     auto analysisManager = G4AnalysisManager::Instance();
-    
+
     analysisManager->Write();
     analysisManager->CloseFile();
 }
