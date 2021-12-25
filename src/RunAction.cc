@@ -9,7 +9,7 @@ RunAction::RunAction()
 {
     auto analysisManager = G4AnalysisManager::Instance();
 
-    analysisManager->CreateH1("EDep", "Energy Deposition", 1024, 0., 3. * MeV);
+    analysisManager->CreateH1("EDep", "Energy Deposition", 1024, 0., 3.);
 
     analysisManager->CreateNtuple("EDep", "Energy Deposition");
     analysisManager->CreateNtupleIColumn("EvtID");
