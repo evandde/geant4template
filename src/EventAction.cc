@@ -1,9 +1,10 @@
+#include "EventAction.hh"
+
 #include "G4Event.hh"
 #include "G4SDManager.hh"
 #include "G4THitsMap.hh"
-#include "g4csv.hh"
+#include "G4GenericAnalysisManager.hh"
 
-#include "EventAction.hh"
 
 EventAction::EventAction()
     : G4UserEventAction(), fHCID(-1)
@@ -29,7 +30,7 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
 
     auto hitsMap = static_cast<G4THitsMap<G4double> *>(HCE->GetHC(fHCID));
 
-    auto analysisManager = G4AnalysisManager::Instance();
+    auto analysisManager = G4GenericAnalysisManager::Instance();
 
     for (const auto &iter : *(hitsMap->GetMap()))
     {

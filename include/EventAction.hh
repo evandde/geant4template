@@ -16,4 +16,4 @@ private:
     G4int fHCID;
 };
 
-#endif // EVENTACTION_HH
+#endif

@@ -27,7 +27,10 @@
 /// \author Evan Kim
 /// \email evandde@gmail.com
 /// \homepage evandde.github.io
-/// \brief Template code for Geant4 (Geant4 10.7.p01)
+/// \brief Template code for Geant4 (Geant4 11.0)
+
+#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
 
 #include "G4RunManagerFactory.hh"
 #include "G4PhysListFactory.hh"
@@ -36,8 +39,6 @@
 #include "G4UIExecutive.hh"
 #include "QBBC.hh"
 
-#include "DetectorConstruction.hh"
-#include "ActionInitialization.hh"
 
 namespace
 {
@@ -55,7 +56,7 @@ namespace
 
                << G4endl;
     }
-} // namespace
+} // anonymous namespace
 
 int main(int argc, char **argv)
 {

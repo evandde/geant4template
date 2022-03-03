@@ -7,7 +7,7 @@
 /event/verbose 0
 /tracking/verbose 0
 
-# gamma 6 MeV to iso
+# gamma 0.662 MeV to iso
 /gps/particle gamma
 /gps/energy 0.662 MeV
 /gps/ang/type iso
