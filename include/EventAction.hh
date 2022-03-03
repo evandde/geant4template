@@ -2,6 +2,7 @@
 #define EVENTACTION_HH
 
 #include "G4UserEventAction.hh"
+#include "globals.hh"
 
 class EventAction : public G4UserEventAction
 {
