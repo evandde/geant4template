@@ -37,7 +37,7 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
-#include "QBBC.hh"
+#include "FTFP_BERT.hh"
 
 
 namespace
@@ -52,7 +52,7 @@ namespace
                   ", inputtype: string"
                << "\n\t[-t] <Set nThreads> default: 1, inputtype: int, Max: "
                << G4Threading::G4GetNumberOfCores()
-               << "\n\t[-p] <Set physics> default: 'QBBC', inputtype: string"
+               << "\n\t[-p] <Set physics> default: 'FTFP_BERT', inputtype: string"
 
                << G4endl;
     }
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     runManager->SetUserInitialization(new DetectorConstruction);
     G4VModularPhysicsList *phys;
     if (physName.empty())
-        phys = new QBBC;
+        phys = new FTFP_BERT;
     else
     {
         G4PhysListFactory factory;
