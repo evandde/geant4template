@@ -1,4 +1,5 @@
 #include "RunAction.hh"
+#include "Run.hh"
 
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
@@ -9,6 +10,9 @@ RunAction::RunAction()
 {
     auto analysisManager = G4GenericAnalysisManager::Instance();
 
+    analysisManager->SetDefaultFileType("csv");
+    analysisManager->SetFileName("Result");
+
     analysisManager->CreateH1("EDep", "Energy Deposition", 1024, 0., 3.);
 
     analysisManager->CreateNtuple("EDep", "Energy Deposition");
@@ -17,9 +21,9 @@ RunAction::RunAction()
     analysisManager->FinishNtuple();
 }
 
-RunAction::~RunAction()
+G4Run* RunAction::GenerateRun()
 {
-    delete G4GenericAnalysisManager::Instance();
+    return new Run;
 }
 
 void RunAction::BeginOfRunAction(const G4Run *)

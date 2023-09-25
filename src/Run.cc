@@ -1,25 +1,12 @@
-#include "EventAction.hh"
+#include "Run.hh"
 
 #include "G4Event.hh"
+#include "G4RunManager.hh"
 #include "G4SDManager.hh"
 #include "G4THitsMap.hh"
-#include "G4GenericAnalysisManager.hh"
+#include "G4AnalysisManager.hh"
 
-
-EventAction::EventAction()
-    : G4UserEventAction(), fHCID(-1)
-{
-}
-
-EventAction::~EventAction()
-{
-}
-
-void EventAction::BeginOfEventAction(const G4Event *)
-{
-}
-
-void EventAction::EndOfEventAction(const G4Event *anEvent)
+void Run::RecordEvent(const G4Event *anEvent)
 {
     auto HCE = anEvent->GetHCofThisEvent();
     if (!HCE)
@@ -30,7 +17,7 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
 
     auto hitsMap = static_cast<G4THitsMap<G4double> *>(HCE->GetHC(fHCID));
 
-    auto analysisManager = G4GenericAnalysisManager::Instance();
+    auto analysisManager = G4AnalysisManager::Instance();
 
     for (const auto &iter : *(hitsMap->GetMap()))
     {
@@ -44,4 +31,11 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
             analysisManager->AddNtupleRow();
         }
     }
+
+    G4Run::RecordEvent(anEvent);
+}
+
+void Run::Merge(const G4Run *aRun)
+{
+    G4Run::Merge(aRun);
 }
